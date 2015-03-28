@@ -10,7 +10,7 @@ void execute(char *ins);
 void print_cells(char *cells);
 
 int main() {
-    char *ins = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    char *ins = ">++++++++[<+++++++++>-]<.>>+>+>++>[-]+<[>[->+<<++++>]<<]>.+++++++..+++.>->+++++++.<+[>[+>]>]<<<+++++++++++++++.>>.+++.------.--------.>>+.>++++.";
     FILE_SIZE = strlen(ins);
     CELL_COUNT = 300;
     execute(ins);
@@ -49,6 +49,18 @@ void execute(char *ins)
                 break;
             case '[':
                 stack_push(stack, eip);
+                // Skip until corresponding bracket
+                if (*ptr == 0) {
+                    eip++;
+                    int count = 0;
+                    while (*eip != ']' || count != 0) {
+                        if (*eip == ']') 
+                            count--;
+                        if (*eip == '[')
+                            count++;
+                        eip++;                        
+                    }
+                }
                 break;
             case ']':
                 if (*ptr != 0) {
@@ -60,7 +72,6 @@ void execute(char *ins)
             default:
                 break;
         }
-        
         eip++;
         instructions++;
         
